@@ -1,0 +1,42 @@
+# Mapbox BLR JS workshop
+
+Notes for February 28 2015 workshop https://www.mapbox.com/blog/make-a-map-blr/
+
+## General resources
+
+- http://mapschool.io/
+- Mapbox guides https://www.mapbox.com/guides/
+- https://www.mapbox.com/mapbox.js/api/v2.1.6/l-mapbox-map/
+
+## Mapbox.js
+
+- Get started here: https://www.mapbox.com/mapbox.js/example/v1.0.0/
+- Our example: http://bl.ocks.org/lxbarth/8f101973e1d6c6f8efda
+- Directions https://www.mapbox.com/mapbox.js/example/v1.0.0/mapbox-directions/
+
+## Turf
+
+- Bezier curves http://bl.ocks.org/2ff3717b1dcd6fb04271
+- Convex hull http://bl.ocks.org/6a3c1842c8357cf5332f
+- Dots following a line https://www.mapbox.com/blog/playback-the-iditarod-with-turf/
+- Heat map https://www.mapbox.com/blog/heatmaps-and-grids-with-turf/
+
+## Other good stuff
+
+- PostGIS
+- Overpass Turbo http://overpass-turbo.eu/
+- http://bl.ocks.org/
+- GH Pages https://pages.github.com/
+- If you're into Python: Fiona and Shapely http://www.macwright.org/2012/10/31/gis-with-python-shapely-fiona.html
+- If you'd like to build your own OSM rendering database https://github.com/openstreetmap/osm2pgsql
+- Convert from geojson to vector tiles fast with https://github.com/mapbox/tippecanoe
+- The future of maps - GL - https://www.mapbox.com/mapbox-gl/
+- Surface API https://www.mapbox.com/blog/introducing-the-surface-api/
+- Plan a ride https://www.mapbox.com/blog/dc-bikeshare-revisited/
+- Icons https://www.mapbox.com/maki/ - use together with https://github.com/mapbox/simplestyle-spec
+- https://www.mapbox.com/industries/agriculture/
+- https://www.mapbox.com/industries/
+- https://www.mapbox.com/education/
+- https://www.mapbox.com/guides/intro-to-studio/
+- https://www.mapbox.com/developers/api/directions/
+- https://www.mapbox.com/jobs/

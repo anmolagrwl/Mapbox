@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox JavaScript - 13 - Scale control</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<script src="bangalore_cafes.js"></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+</head>
+
+<body>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+
+var map = new L.mapbox.map("map", 'anmol1771.lb7750f2',{
+        // Disable default double-click behavior.
+        doubleClickZoom: false
+    })
+    .setView([12.9279230, 77.6271080], 12)
+    .addControl(L.mapbox.geocoderControl('mapbox.places', {
+        autocomplete: true,
+        keepOpen: true
+    }))
+    .on('dblclick', function(e) {
+    // Zoom exactly to each double-clicked point
+    map.setView(e.latlng, map.getZoom() + 1);
+    });
+
+var featureLayer = L.mapbox.featureLayer(cafes).addTo(map);
+
+featureLayer.eachLayer(function(layer) {
+    var content = '<h1>'+ layer.feature.properties.name +'</h1>'
+    
+    // Binds a popup with a particular HTML content to a click on this marker.
+    // http://leafletjs.com/reference.html#marker-bindpopup
+    layer.bindPopup(content);
+
+    if (layer.toGeoJSON().geometry.type == "Point") {
+        layer.setIcon(L.mapbox.marker.icon({
+            'marker-size': 'large',
+            'marker-symbol': 'cafe',
+            'marker-color': '#552700'
+        }));
+    } else if (layer.toGeoJSON().geometry.type == "Polygon") {
+        layer.setStyle({
+            fillColor: '#552700',
+            color: '#552700',
+            weight: 2
+        })
+    };;
+});
+
+featureLayer.on('mouseover', function(e) {
+    e.layer.openPopup();
+});
+featureLayer.on('mouseout', function(e) {
+    e.layer.closePopup();
+});
+
+// L.control.scale() is included in Leaflet see
+// https://www.mapbox.com/mapbox.js/api/v2.1.6/l-control-scale/
+L.control.scale().addTo(map);
+
+</script>
+
+</body>
+</html>

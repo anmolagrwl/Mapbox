@@ -1,0 +1,51 @@
+<!-- Leaflet Hash - When a map is panned or zoomed, add the coordinates to the URL. -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox JavaScript - 3 - Leaflet Hash</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<!-- adding Leaflet Hash JS file through CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+</head>
+
+<body>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+
+// map is added to #map id in the body of HTML. Second argument is unique Map ID from your Mapbox account.
+var map = L.mapbox.map('map', 'anmol1771.lb7750f2')
+	// Sets the view of the map (geographical center and zoom) with latitude, longitude and zoom level.
+    .setView([12.9279230, 77.6271080], 15)
+
+    // mapbox.places is used to power general-purpose map and location search UIs. It helps making the queries to Mapbox Geocoding API.
+    // .addControl(L.mapbox.geocoderControl('mapbox.places'));
+
+    // we can optionally add auto-complete feature to our search bar.
+    .addControl(L.mapbox.geocoderControl('mapbox.places', {
+        autocomplete: true
+    }))
+
+var hash = L.hash(map);
+</script>
+
+
+</body>
+</html>

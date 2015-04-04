@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox JavaScript - 1 - Basic Turf Example</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<!-- install Turf JS from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v1.3.0/turf.min.js'></script>
+
+<!-- bringing in the data -->
+<script src="bangalore_hospitals.js"></script>
+<script src="bangalore_libraries.js"></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+</head>
+
+<body>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+
+// map is added to #map id in the body of HTML. Second argument is unique Map ID from your Mapbox account.
+var map = L.mapbox.map('map', 'mapbox.light')
+	// Sets the view of the map (geographical center and zoom) with latitude, longitude and zoom level.
+    .setView([12.9279230, 77.6271080], 14);
+
+// Add marker color, symbol, and size to hospital GeoJSON
+for(var i = 0; i < hospitals.features.length; i++) {
+  hospitals.features[i].properties['marker-color'] = '#DC143C';
+  hospitals.features[i].properties['marker-symbol'] = 'hospital';
+  hospitals.features[i].properties['marker-size'] = 'small';
+};
+
+// Add marker color, symbol, and size to library GeoJSON
+for (var i = 0; i < libraries.features.length; i++) {
+  libraries.features[i].properties['marker-color'] = '#4169E1';
+  libraries.features[i].properties['marker-symbol'] = 'library';
+  libraries.features[i].properties['marker-size'] = 'small';
+};
+
+var hospitalLayer = L.mapbox.featureLayer(hospitals).addTo(map);
+var libraryLayer = L.mapbox.featureLayer(libraries).addTo(map);
+
+// When map loads, zoom to libraryLayer features
+// map.fitBounds(libraryLayer.getBounds());
+
+// Bind a popup to each feature in hospitalLayer and libraryLayer
+hospitalLayer.eachLayer(function (layer) {
+	layer.bindPopup('<strong>' + layer.feature.properties.name + '</strong>', { closeButton: false });
+}).addTo(map);
+
+libraryLayer.eachLayer(function (layer) {
+	layer.bindPopup(layer.feature.properties.name, { closeButton: false });
+}).addTo(map);
+
+// Open popups on hover
+libraryLayer.on('mouseover', function (e) {
+	e.layer.openPopup();
+});
+
+hospitalLayer.on('mouseover', function (e) {
+	e.layer.openPopup();
+});
+
+libraryLayer.on('click', function (e) {
+  // Reset any and all marker sizes to small
+  reset();
+
+  // Get the GeoJSON from libraryFeatures and hospitalFeatures
+  var libraryFeatures = libraryLayer.getGeoJSON();
+  var hospitalFeatures = hospitalLayer.getGeoJSON();
+
+  // Using Turf, find the nearest hospital to library clicked
+  var nearestHospital = turf.nearest(e.layer.feature, hospitalFeatures);
+
+  // Change the nearest hospital to a large marker
+  nearestHospital.properties['marker-size'] = 'large';
+
+  // Add the new GeoJSON to hospitalLayer
+  hospitalLayer.setGeoJSON(hospitalFeatures);
+  
+
+  // Bind popups to new hospitalLayer and open popup
+  // for nearest hospital
+  hospitalLayer.eachLayer(function (layer) {
+    layer.bindPopup('<strong>' + layer.feature.properties.name + '</strong>', { closeButton: false });
+    if (layer.feature.properties['marker-size'] === 'large') {
+      layer.openPopup();
+    };
+  });
+});
+
+// reset marker size to small
+function reset() {
+  var hospitalFeatures = hospitalLayer.getGeoJSON();
+    for (var i = 0; i < hospitalFeatures.features.length; i++) {
+      hospitalFeatures.features[i].properties['marker-size'] = 'small';
+    };
+    hospitalLayer.setGeoJSON(hospitalFeatures);
+};
+
+map.on('click', function (e) {
+  reset();
+});
+
+</script>
+</body>
+</html>

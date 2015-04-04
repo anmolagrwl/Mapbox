@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox JavaScript - 22 - Marker tooltips outside the map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<script src="bangalore_banks.js"></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  .info {
+  position:absolute;
+  top:10px;
+  right:10px;
+  }
+  .info div {
+    background:#fff;
+    padding:10px;
+    border-radius:3px;
+    }
+</style>
+
+</head>
+
+<body>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+<div id='info' class='info'></div>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+var info = document.getElementById('info');
+// map is added to #map id in the body of HTML. Second argument is unique Map ID from your Mapbox account.
+var map = L.mapbox.map('map', 'anmol1771.lb7750f2')
+	// Sets the view of the map (geographical center and zoom) with latitude, longitude and zoom level.
+    .setView([12.9279230, 77.6271080], 15)
+
+    // mapbox.places is used to power general-purpose map and location search UIs. It helps making the queries to Mapbox Geocoding API.
+    // .addControl(L.mapbox.geocoderControl('mapbox.places'));
+
+    // we can optionally add auto-complete feature to our search bar.
+    .addControl(L.mapbox.geocoderControl('mapbox.places', {
+        autocomplete: true
+    }));
+
+// L.mapbox.featureLayer provides an easy way to integrate GeoJSON from Mapbox and elsewhere into your map. Here 'parks' is coming from GeoJSON data in bangalore_parks.js file.
+var featureLayer = L.mapbox.featureLayer(banks).addTo(map);
+
+
+featureLayer.eachLayer(function(layer) {
+
+    if (layer.toGeoJSON().geometry.type == "Point") {
+        layer.setIcon(L.mapbox.marker.icon({
+            'marker-size': 'large',
+            'marker-symbol': 'bank',
+            'marker-color': '#669933'
+        }));
+    } else if (layer.toGeoJSON().geometry.type == "Polygon") {
+        layer.setStyle({
+            fillColor: '#669933',
+            color: '#669933',
+            weight: 2
+        })
+    };;
+});
+
+// Listen for individual marker clicks.
+featureLayer.on('click',function(e) {
+
+    var feature = e.layer.feature;
+    var content = '<div><strong>' + feature.properties.name + '</strong>' +
+                  '<p><strong>ATM : </strong>' + feature.properties.atm + '</p></div>';
+
+    info.innerHTML = content;
+});
+
+// Clear the tooltip when map is clicked.
+map.on('move', empty);
+
+// Trigger empty contents when the script
+// has loaded on the page.
+empty();
+
+function empty() {
+  info.innerHTML = '<div><strong>Click a marker</strong></div>';
+  }
+
+
+</script>
+
+</body>
+</html>
+
+<!-- http://gis.stackexchange.com/questions/110626/how-to-style-geojson-polygon-using-l-mapbox-featurelayer -->

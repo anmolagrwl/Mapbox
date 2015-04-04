@@ -1,0 +1,173 @@
+<!-- buggy -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox JavaScript - 19 - Filtering markers</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<script src="bangalore_cafes.js"></script>
+<script src="bangalore_parks.js"></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  
+  .menu-ui {
+  background:#fff;
+  position:absolute;
+  top:10px;right:10px;
+  z-index:1;
+  border-radius:3px;
+  width:120px;
+  border:1px solid rgba(0,0,0,0.4);
+  }
+  .menu-ui a {
+    font-size:13px;
+    color:#404040;
+    display:block;
+    margin:0;padding:0;
+    padding:10px;
+    text-decoration:none;
+    border-bottom:1px solid rgba(0,0,0,0.25);
+    text-align:center;
+    }
+    .menu-ui a:first-child {
+      border-radius:3px 3px 0 0;
+      }
+    .menu-ui a:last-child {
+      border:none;
+      border-radius:0 0 3px 3px;
+      }
+    .menu-ui a:hover {
+      background:#f8f8f8;
+      color:#404040;
+      }
+    .menu-ui a.active,
+    .menu-ui a.active:hover {
+      background:#3887BE;
+      color:#FFF;
+      }
+</style>
+
+</head>
+
+<body>
+
+<nav id='menu-ui' class='menu-ui'>
+  <a href='#' id='filter-cafes'>Cafes</a>
+  <a href='#' id='filter-parks'>Parks</a>
+</nav>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+
+var map = new L.mapbox.map("map", 'anmol1771.jd89a8ep')
+    .setView([12.9279230, 77.6271080], 12)
+    .addControl(L.mapbox.geocoderControl('mapbox.places', {
+        autocomplete: true,
+        keepOpen: true
+    }));
+
+var cafe = document.getElementById('filter-cafes');
+var park = document.getElementById('filter-parks');
+
+// CAFES
+// --------
+var CafeLayer = L.mapbox.featureLayer(cafes).addTo(map);
+CafeLayer.eachLayer(function(layer) {
+    var content = '<h1>'+ layer.feature.properties.name +'</h1>'
+    
+    // Binds a popup with a particular HTML content to a click on this marker.
+    // http://leafletjs.com/reference.html#marker-bindpopup
+    layer.bindPopup(content);
+
+    if (layer.toGeoJSON().geometry.type == "Point") {
+        layer.setIcon(L.mapbox.marker.icon({
+            'marker-size': 'large',
+            'marker-symbol': 'cafe',
+            'marker-color': '#552700'
+        }));
+    } else if (layer.toGeoJSON().geometry.type == "Polygon") {
+        layer.setStyle({
+            fillColor: '#552700',
+            color: '#552700',
+            weight: 2
+        })
+    };;
+});
+
+// PARKS
+// ----------
+var ParkLayer = L.mapbox.featureLayer(parks).addTo(map);
+ParkLayer.eachLayer(function(layer) {
+    var content = '<h1>'+ layer.feature.properties.name +'</h1>'
+    
+    // Binds a popup with a particular HTML content to a click on this marker.
+    // http://leafletjs.com/reference.html#marker-bindpopup
+    layer.bindPopup(content);
+
+    if (layer.toGeoJSON().geometry.type == "Point") {
+        layer.setIcon(L.mapbox.marker.icon({
+            'marker-size': 'large',
+            'marker-symbol': 'park2',
+            'marker-color': '#0f5738'
+        }));
+    } else if (layer.toGeoJSON().geometry.type == "Polygon") {
+        layer.setStyle({
+            fillColor: '#0f5738',
+            color: '#0f5738',
+            weight: 2
+        })
+    };;
+});
+
+// CHANGE
+// ------
+cafe.onclick = function(e) {
+        park.className = '';
+        this.className = 'active';
+        // The setFilter function takes a GeoJSON feature object
+        // and returns true to show it or false to hide it.
+        CafeLayer.setFilter(function(f) {
+            // return f.properties['marker-symbol'] === 'cafe';
+          return true;
+        });
+        ParkLayer.setFilter(function(f) {
+            // return f.properties['marker-symbol'] === 'park2';
+          return false;
+        });
+        
+    };
+
+park.onclick = function(e) {
+        cafe.className = '';
+        this.className = 'active';
+        // The setFilter function takes a GeoJSON feature object
+        // and returns true to show it or false to hide it.
+        ParkLayer.setFilter(function(f) {
+            // return f.properties['marker-symbol'] === 'park2';
+          return true;
+        });
+        CafeLayer.setFilter(function(f) {
+            // return f.properties['marker-symbol'] === 'cafe';
+          return false;
+        });
+        
+    };
+
+
+</script>
+
+</body>
+</html>

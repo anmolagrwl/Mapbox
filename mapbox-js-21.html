@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox JavaScript - 21 - List markers and pan to clicked items</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<script src="bangalore_cafes.js"></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  #marker-list {
+      position:absolute;
+      top:0; right:0; width:200px;
+      bottom:0;
+      overflow-x:auto;
+      background:#fff;
+      margin:0;
+      padding:5px;
+  }
+  #marker-list li {
+      padding:5px;
+      margin:0;
+      list-style-type:none;
+  }
+  #marker-list li:hover {
+      background:#eee;
+  }
+</style>
+
+</head>
+
+<body>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+<ul id='marker-list'></ul>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+
+// map is added to #map id in the body of HTML. Second argument is unique Map ID from your Mapbox account.
+var map = L.mapbox.map('map', 'anmol1771.lb7750f2')
+	// Sets the view of the map (geographical center and zoom) with latitude, longitude and zoom level.
+    .setView([12.9279230, 77.6271080], 15);
+
+var markerList = document.getElementById('marker-list');
+
+var featureLayer = L.mapbox.featureLayer(cafes).addTo(map);
+
+
+featureLayer.eachLayer(function(layer) {
+  
+  var content = '<h1>'+ layer.feature.properties.name +'</h1>'
+  layer.bindPopup(content);
+
+  var item = markerList.appendChild(document.createElement('li'));
+  item.innerHTML = layer.feature.properties.name;
+  
+  item.onclick = function() {
+     map.setView(layer.getLatLng(), 15);
+     layer.openPopup();
+  };
+});
+
+</script>
+
+</body>
+</html>
