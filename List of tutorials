@@ -57,7 +57,9 @@ Converting the map into local language *
 Leaflet Label *
 Leaflet Omnivore *
 
-14,19,23
+14,19,23,24
+
+turf - 2,3
 
 http://stackoverflow.com/questions/24357564/javascript-issue-using-setfilter-and-mapbox-api
 
@@ -72,7 +74,6 @@ Turf-featurecollection
 
 Turf-average
 Turf-centroid
-Turf-distance
 Turf-intersect
 Turf-filter
 Turf-isobands
