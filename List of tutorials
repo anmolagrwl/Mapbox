@@ -62,6 +62,10 @@ Leaflet Omnivore *
 turf - 2,3
 
 http://stackoverflow.com/questions/24357564/javascript-issue-using-setfilter-and-mapbox-api
+https://www.mapbox.com/mapbox.js/example/v1.0.0/toggling-ui/
+http://stackoverflow.com/questions/24004886/mapbox-toggle-visibility-of-multiple-layers
+https://www.mapbox.com/mapbox.js/example/v1.0.0/layers/
+https://www.mapbox.com/mapbox.js/example/v1.0.0/toggling-ui/
 
 Turf-buffer
 Turf-inside
@@ -95,3 +99,6 @@ https://www.mapbox.com/guides/google-to-mapbox/
 https://www.mapbox.com/guides/extending-interactivity/
 https://www.mapbox.com/guides/an-open-platform/
 https://www.mapbox.com/guides/master-web-map-layers/
+https://www.mapbox.com/guides/glossary/
+https://www.mapbox.com/guides/intro-to-studio/
+https://www.mapbox.com/guides/print/
