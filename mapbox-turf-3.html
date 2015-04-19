@@ -81,17 +81,51 @@ console.log(url);
 
 var xmlhttp = new XMLHttpRequest();
 
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
 xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         var myArr = JSON.parse(xmlhttp.responseText);
-        console.log(myArr.routes[0].geometry.coordinates);  
+        // console.log(myArr.routes[0].geometry.type);
+        // console.log(myArr.routes[0].geometry.coordinates);  
         var coord = myArr.routes[0].geometry.coordinates;
-        var ls = turf.linestring(coord);
-        // I have got all the points. I just have to add the line to map.
+        var coords = []
+
+        for (var i = coord.length - 1; i >= 0; i--) {
+            var lngi = coord[i][0];
+            var lati = coord[i][1];
+
+            coords.push([lati, lngi]);
+        };
+
+        var polyline_options = {
+            color: '#000'
+        };
+
+        var polyline = L.polyline(coords, polyline_options).addTo(map);
+        // console.log(myArr.routes[0].steps);
+
+        for (var i = 0; i < myArr.routes[0].steps.length; i++) {
+            console.log(myArr.routes[0].steps[i].maneuver.instruction)
+        };
+
+        // var featureLayer = L.mapbox.featureLayer(myArr.routes[0].steps).addTo(map);
+
+        // featureLayer.eachLayer(function(layer) {
+        //     var content = '<h1>'+ layer.maneuver.instruction +'</h1>'
+        //     layer.bindPopup(content);
+        // });
+
+        // featureLayer.on('mouseover', function(e) {
+        //     e.layer.openPopup();
+        // });
+        // featureLayer.on('mouseout', function(e) {
+        //     e.layer.closePopup();
+        // });
+
     }
 }
-xmlhttp.open("GET", url, true);
-xmlhttp.send();
 
 </script>
 </body>

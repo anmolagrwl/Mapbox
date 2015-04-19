@@ -76,11 +76,26 @@ libraryLayer.on('click', function (e) {
 	var libraryFeatures = libraryLayer.getGeoJSON();
   	var hospitalFeatures = hospitalLayer.getGeoJSON();
   	// console.log(libraryFeatures.features[1]);
+    var hospital_distance = [];
+    var hospital_names = [];
+    var nearestHospital;
+    var hospital_n_d = [];
+    var hospital_n_d_3 = [];
 
   	for (var i = hospitalFeatures.features.length - 1; i >= 0; i--) {
-  		var nearestHospital = turf.distance(e.layer.feature, hospitalFeatures.features[i],"kilometers");
-  		console.log(nearestHospital);
+  		nearestHospital = turf.distance(e.layer.feature, hospitalFeatures.features[i],"kilometers");
+  		// console.log(nearestHospital);
+      // hospital_distance.push(nearestHospital);
+      // hospital_names.push(hospitalFeatures.features[i].properties.name);
+      hospital_n_d.push([nearestHospital,hospitalFeatures.features[i].properties.name]);
   	};
+    
+    // console.log(hospital_distance.sort());
+    // console.log(hospital_names);
+    // console.log(hospital_n_d);
+    // console.log(hospital_n_d.sort());
+    hospital_n_d_3 = hospital_n_d.sort().slice(0, 3);
+    console.log(hospital_n_d_3);
 })
 
 </script>
