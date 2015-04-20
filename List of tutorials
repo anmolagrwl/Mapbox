@@ -57,9 +57,15 @@ Converting the map into local language *
 Leaflet Label *
 Leaflet Omnivore *
 
-14,19,23
+14,19,23,24,25
+
+turf - 2,3
 
 http://stackoverflow.com/questions/24357564/javascript-issue-using-setfilter-and-mapbox-api
+https://www.mapbox.com/mapbox.js/example/v1.0.0/toggling-ui/
+http://stackoverflow.com/questions/24004886/mapbox-toggle-visibility-of-multiple-layers
+https://www.mapbox.com/mapbox.js/example/v1.0.0/layers/
+https://www.mapbox.com/mapbox.js/example/v1.0.0/toggling-ui/
 
 Turf-buffer
 Turf-inside
@@ -72,7 +78,6 @@ Turf-featurecollection
 
 Turf-average
 Turf-centroid
-Turf-distance
 Turf-intersect
 Turf-filter
 Turf-isobands
@@ -82,3 +87,19 @@ Turf-linedistance
 Turf-remove
 
 Turf-reclass
+
+https://www.mapbox.com/mapbox.js/example/v1.0.0/live-data-marker/
+https://www.mapbox.com/mapbox.js/example/v1.0.0/firebase-live-editing/
+
+https://www.mapbox.com/guides/how-web-maps-work/
+https://www.mapbox.com/tilemill/docs/guides/advanced-map-design/
+https://www.mapbox.com/guides/javascript-and-mapboxjs-fundamentals/
+https://www.mapbox.com/guides/how-mapbox-works/
+https://www.mapbox.com/guides/google-to-mapbox/
+https://www.mapbox.com/guides/extending-interactivity/
+https://www.mapbox.com/guides/an-open-platform/
+https://www.mapbox.com/guides/master-web-map-layers/
+https://www.mapbox.com/guides/glossary/
+https://www.mapbox.com/guides/intro-to-studio/
+https://www.mapbox.com/guides/print/
+https://www.mapbox.com/guides/style-quickstart/

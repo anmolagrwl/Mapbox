@@ -1,0 +1,132 @@
+<!-- buggy -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mapbox Directions API</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<!-- install Mapbox's JS and CSS files from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+
+<!-- install Turf JS from CDN -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v1.3.0/turf.min.js'></script>
+
+<!-- Little bit of styling for body and #map container -->
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+</head>
+
+<body>
+
+<!-- This is where map will be put -->
+<div id='map'></div>
+
+<script>
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A';
+
+// map is added to #map id in the body of HTML. Second argument is unique Map ID from your Mapbox account.
+var map = L.mapbox.map('map', 'anmol1771.lb7750f2')
+	// Sets the view of the map (geographical center and zoom) with latitude, longitude and zoom level.
+    .setView([12.9279230, 77.6271080], 12);
+
+var marker1 = L.marker(new L.LatLng(12.9279230, 77.6271080), {
+    icon: L.mapbox.marker.icon({
+        'marker-color': 'ff8888'
+    }),
+    draggable: true
+});
+
+var marker2 = L.marker(new L.LatLng(12.8279230, 77.6271080), {
+    icon: L.mapbox.marker.icon({
+        'marker-color': '#666'
+    }),
+    draggable: true
+});
+
+// marker1.bindPopup('Marker 1');
+marker1.addTo(map);
+
+// marker2.bindPopup('Marker 2');
+marker2.addTo(map);
+
+marker1.on('dragend', function(event){
+        var marker = event.target;
+        var position = marker.getLatLng();
+        // console.log(position);
+});
+map.addLayer(marker1);
+
+marker2.on('dragend', function(event){
+        var marker = event.target;
+        var position = marker.getLatLng();
+        // console.log(position);
+});
+map.addLayer(marker2);
+
+var mark1_lat = marker1.getLatLng().lat;
+var mark1_lng = marker1.getLatLng().lng;
+
+var mark2_lat = marker2.getLatLng().lat;
+var mark2_lng = marker2.getLatLng().lng;
+
+var url = "http://api.tiles.mapbox.com/v4/directions/mapbox.driving/" + mark1_lng + "," + mark1_lat + ";" + mark2_lng + "," + mark2_lat +".json?access_token=pk.eyJ1IjoiYW5tb2wxNzcxIiwiYSI6ImNYZXN1N28ifQ.s-1Hjdb2UR9_6eeTPJGn3A"
+
+console.log(url);
+
+var xmlhttp = new XMLHttpRequest();
+
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var myArr = JSON.parse(xmlhttp.responseText);
+        // console.log(myArr.routes[0].geometry.type);
+        // console.log(myArr.routes[0].geometry.coordinates);  
+        var coord = myArr.routes[0].geometry.coordinates;
+        var coords = []
+
+        for (var i = coord.length - 1; i >= 0; i--) {
+            var lngi = coord[i][0];
+            var lati = coord[i][1];
+
+            coords.push([lati, lngi]);
+        };
+
+        var polyline_options = {
+            color: '#000'
+        };
+
+        var polyline = L.polyline(coords, polyline_options).addTo(map);
+        // console.log(myArr.routes[0].steps);
+
+        for (var i = 0; i < myArr.routes[0].steps.length; i++) {
+            console.log(myArr.routes[0].steps[i].maneuver.instruction)
+        };
+
+        // var featureLayer = L.mapbox.featureLayer(myArr.routes[0].steps).addTo(map);
+
+        // featureLayer.eachLayer(function(layer) {
+        //     var content = '<h1>'+ layer.maneuver.instruction +'</h1>'
+        //     layer.bindPopup(content);
+        // });
+
+        // featureLayer.on('mouseover', function(e) {
+        //     e.layer.openPopup();
+        // });
+        // featureLayer.on('mouseout', function(e) {
+        //     e.layer.closePopup();
+        // });
+
+    }
+}
+
+</script>
+</body>
+</html>
